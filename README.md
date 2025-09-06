@@ -21,7 +21,7 @@ This phase established the foundation for the todo list application:
 ### ✅ Completed Tasks:
 
 1. **Project Initialization**: Created Vite React-TypeScript project
-2. **Dependencies Installed**: 
+2. **Dependencies Installed**:
    - `@tanstack/react-query` for server state management
    - `axios` for HTTP requests
    - `tailwindcss` for styling
@@ -52,9 +52,17 @@ This phase established the foundation for the todo list application:
 ### ⏭️ Next Steps (Phase 2)
 
 Ready to begin Sprint 1: Read & Display Todos
+
 - Create `useGetTodos` hook with React Query
 - Build `TodoItem` and `TodoList` components
 - Implement basic todo list display with loading and error states
+
+### 📚 Documentation
+
+- **[.copilot-instructions.md](./.copilot-instructions.md)** - Main Copilot instructions for the project
+- **[PROJECT_RULES.md](./.copilot-instructions/PROJECT_RULES.md)** - Comprehensive development rules and guidelines
+- **[QUICK_REFERENCE.md](./.copilot-instructions/QUICK_REFERENCE.md)** - Developer quick reference card
+- **[development-plan.md](./development-plan.md)** - Detailed development roadmap
 
 ---
 
@@ -70,6 +78,7 @@ Ready to begin Sprint 1: Read & Display Todos
 ### ⏭️ Next Steps (Phase 2):
 
 Ready to begin Sprint 1: Read & Display Todos
+
 - Create `useGetTodos` hook with React Query
 - Build `TodoItem` and `TodoList` components
 - Implement basic todo list display with loading and error states
@@ -82,27 +91,27 @@ You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-re
 
 ```js
 // eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+import reactX from "eslint-plugin-react-x";
+import reactDom from "eslint-plugin-react-dom";
 
 export default tseslint.config([
-  globalIgnores(['dist']),
+  globalIgnores(["dist"]),
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ["**/*.{ts,tsx}"],
     extends: [
       // Other configs...
       // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
+      reactX.configs["recommended-typescript"],
       // Enable lint rules for React DOM
       reactDom.configs.recommended,
     ],
     languageOptions: {
       parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
         tsconfigRootDir: import.meta.dirname,
       },
       // other options...
     },
   },
-])
+]);
 ```

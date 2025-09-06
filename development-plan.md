@@ -1,8 +1,8 @@
 # Todo List React Application Development Plan
 
-**Version:** 1.2  
+**Version:** 1.3  
 **Date:** September 5, 2025  
-**Updated:** September 6, 2025 - Project moved to root directory ✅
+**Updated:** September 6, 2025 - Instructions moved to .copilot-instructions/ ✅
 
 ---
 
@@ -11,11 +11,17 @@
 ### ✅ COMPLETED PHASES
 
 #### Phase 1: Project Setup & Foundation (Sprint 0) - **COMPLETED** ✅
-- **Status**: ✅ COMPLETE (September 6, 2025)
+
+- **Status**: ✅ CO### 📚 Project Documentation
+- `.copilot-instructions.md` - Main Copilot instructions for the project
+- `.copilot-instructions/PROJECT_RULES.md` - Comprehensive development rules and guidelines
+- `.copilot-instructions/QUICK_REFERENCE.md` - Developer quick reference card
+- `.editorconfig` - Code formatting standardsTE (September 6, 2025)
 - **Location**: `/home/lcyin/workspace/todo-list-web/` (moved to root)
 - **Development Server**: Running at http://localhost:5173/
 
 **Completed Tasks:**
+
 - ✅ Vite React-TypeScript project created
 - ✅ Core dependencies installed (React Query, Axios, Tailwind CSS)
 - ✅ Tailwind CSS configured with postcss
@@ -28,6 +34,7 @@
 - ✅ Basic TodosPage component created
 
 **Generated Files:**
+
 - `src/api/` - Complete API client and TypeScript types
 - `src/pages/TodosPage.tsx` - Main application page
 - `src/App.tsx` - Application root with React Query setup
@@ -38,16 +45,22 @@
 ### 🔄 CURRENT PHASE
 
 #### Phase 2: Feature Development - **IN PROGRESS** 🔄
+
 - **Current Sprint**: Ready to begin Sprint 1
 - **Next Task**: Create `useGetTodos` hook and display components
 
 ### 📋 UPCOMING PHASES
 
 #### Sprint 1: Read & Display Todos - **PENDING** ⏳
-#### Sprint 2: Create & Delete Todos - **PENDING** ⏳  
+
+#### Sprint 2: Create & Delete Todos - **PENDING** ⏳
+
 #### Sprint 3: Update Todos & Advanced Functionality - **PENDING** ⏳
+
 #### Phase 3: UI/UX Polish & Refinement - **PENDING** ⏳
+
 #### Phase 4: Testing & Quality Assurance - **PENDING** ⏳
+
 #### Phase 5: Build & Deployment - **PENDING** ⏳
 
 ---
@@ -91,11 +104,12 @@ The provided OpenAPI 3.0.0 specification details a standard RESTful API for mana
 **Foundation**: Basic app structure with React Query provider setup
 
 ### 🗂️ CREATED FILE STRUCTURE
+
 ```
 todo-list-web/ (root)
 ├── src/
 │   ├── api/                    # ✅ Generated API client & types
-│   │   ├── core/              # API core functionality  
+│   │   ├── core/              # API core functionality
 │   │   ├── models/            # TypeScript type definitions
 │   │   ├── services/          # API service methods
 │   │   ├── index.ts           # Main API exports
@@ -189,23 +203,27 @@ npm install axios @tanstack/react-query tailwindcss postcss autoprefixer
 **Remaining Tasks:**
 
 - ⏳ **API Layer:** Create a custom hook `useGetTodos` using TanStack Query's useQuery that calls the `GET /api/v1/todos` endpoint.
-  - File: `src/hooks/useGetTodos.ts` 
+
+  - File: `src/hooks/useGetTodos.ts`
   - Use: Generated `TodosService.getTodos()` from API client
   - Handle: Loading, error, and success states
 
-- ⏳ **Component:** `TodoItem.tsx`: Create a component to display a single todo. 
+- ⏳ **Component:** `TodoItem.tsx`: Create a component to display a single todo.
+
   - File: `src/components/TodoItem.tsx`
   - Props: `todo: Todo` (from generated types)
   - Display: Title, description, completed checkbox, timestamps
   - Styling: Tailwind CSS for clean layout
 
 - ⏳ **Component:** `TodoList.tsx`: Component to render list of todos.
-  - File: `src/features/TodoList.tsx` 
+
+  - File: `src/features/TodoList.tsx`
   - Integration: Use `useGetTodos` hook
   - States: Loading spinner, error message, empty state
   - Render: Map over todos and render `TodoItem` components
 
 - ⏳ **Page:** `TodosPage.tsx`: Update existing page to include TodoList.
+
   - File: `src/pages/TodosPage.tsx` (update existing)
   - Layout: Header + TodoList component
   - Remove: Placeholder content
@@ -213,6 +231,7 @@ npm install axios @tanstack/react-query tailwindcss postcss autoprefixer
 - ⏳ **Initial Styling:** Apply basic Tailwind CSS for clean, readable list.
 
 **Ready for Development:**
+
 - ✅ API types available: `Todo`, `TodosResponse`, `TodosService`
 - ✅ React Query configured in App.tsx
 - ✅ Tailwind CSS ready for styling
@@ -301,26 +320,36 @@ This phase is broken down into sprints, each delivering a core piece of function
 ## 📚 QUICK REFERENCE
 
 ### 🚀 Development Commands
+
 ```bash
 cd /home/lcyin/workspace/todo-list-web
 npm run dev                    # Start development server (http://localhost:5173)
-npm run build                  # Build for production  
+npm run build                  # Build for production
 npm run generate-api           # Regenerate API types from api-docs.json
 npm run lint                   # Run ESLint
 ```
 
 ### 📁 Key Directories
+
 - `src/api/` - Generated API client (TodosService, types)
-- `src/hooks/` - React Query hooks (useGetTodos, etc.)  
+- `src/hooks/` - React Query hooks (useGetTodos, etc.)
 - `src/components/` - Reusable UI components (TodoItem, etc.)
 - `src/features/` - Feature components (TodoList, etc.)
 - `src/pages/` - Page components (TodosPage)
 
-### 🔧 Current Status
+### � Project Documentation
+
+- `PROJECT_RULES.md` - Comprehensive development rules and guidelines
+- `QUICK_REFERENCE.md` - Developer quick reference card
+- `.editorconfig` - Code formatting standards
+
+### �🔧 Current Status
+
 - **✅ Phase 1**: Complete - Foundation ready
-- **🔄 Current**: Sprint 1 - Read & Display Todos  
+- **🔄 Current**: Sprint 1 - Read & Display Todos
 - **⏳ Next**: Create useGetTodos hook
 
-### 🌐 Environment  
+### 🌐 Environment
+
 - **Development**: `VITE_API_BASE_URL=http://localhost:3000`
 - **Production**: `VITE_API_BASE_URL=https://api.todolist.com`
