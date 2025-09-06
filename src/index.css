@@ -1,87 +1,71 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap");
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Base styles */
-@layer base {
-  body {
-    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
-    line-height: 1.5;
-    color: #212121;
-  }
-
-  /* Enhanced focus styles for accessibility */
-  button:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible {
-    outline: 2px solid #2196f3;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
-  }
-
-  /* Custom selection styling */
-  ::selection {
-    background: rgba(33, 150, 243, 0.2);
-    color: #212121;
-  }
-
-  ::-moz-selection {
-    background: rgba(33, 150, 243, 0.2);
-    color: #212121;
-  }
+/* Global styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Clean scrollbar styling */
-@layer utilities {
-  .scrollbar-thin {
-    scrollbar-width: thin;
-    scrollbar-color: #757575 #e0e0e0;
-  }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
 
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 8px;
-  }
+#root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-  .scrollbar-thin::-webkit-scrollbar-track {
-    background: #e0e0e0;
-    border-radius: 8px;
-  }
+/* Button styles */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
 
-  .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: #757575;
-    border-radius: 8px;
-    border: 2px solid #e0e0e0;
-  }
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
 
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: #212121;
-  }
+/* Input styles */
+input,
+textarea,
+select {
+  font-family: inherit;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  transition: border-color 0.2s ease;
+}
 
-  /* Simple, clean transitions as specified in visual guide */
-  .transition-standard {
-    transition: all 200ms ease-in-out;
-  }
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #007bff;
+}
 
-  /* Hover lift effect for cards */
-  .hover-lift:hover {
-    transform: translateY(-2px);
-  }
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
 
-  /* Button hover scale effect */
-  .hover-scale:hover {
-    transform: scale(1.02);
-  }
-
-  /* Button press effect */
-  .btn-press {
-    transition: all 0.1s ease-in-out;
-  }
-
-  .btn-press:active {
-    transform: scale(0.95);
-  }
+/* Card styles */
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
 }

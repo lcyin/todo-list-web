@@ -1,21 +1,13 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ToastProvider } from "./components";
-import "./api/config"; // Initialize API configuration
-import TodosPage from "./pages/TodosPage";
+import React from "react";
+import { TodoList } from "./components/TodoList";
+import "./App.css";
 
-// Create a client
-const queryClient = new QueryClient();
-
-function App() {
+const App: React.FC = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ToastProvider>
-        <div className="min-h-screen bg-background">
-          <TodosPage />
-        </div>
-      </ToastProvider>
-    </QueryClientProvider>
+    <div className="App">
+      <TodoList />
+    </div>
   );
-}
+};
 
 export default App;
