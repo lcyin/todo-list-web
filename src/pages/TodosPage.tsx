@@ -1,26 +1,60 @@
 import React, { useState } from "react";
 import { TodoList, AddTodoForm } from "../components";
-import { useCreateTodo, useDeleteTodo, useToast } from "../hooks";
+import { useCreateTodo, useDeleteTodo, useUpdateTodo, useToast, useDebounce } from "../hooks";
 import type { CreateTodoRequest } from "../api/models/CreateTodoRequest";
+import type { UpdateTodoRequest } from "../api/models/UpdateTodoRequest";
+import type { Todo } from "../api/models/Todo";
 
 const TodosPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCompleted, setFilterCompleted] = useState<boolean | undefined>(undefined);
   const [showAddForm, setShowAddForm] = useState(false);
   const [deletingTodoId, setDeletingTodoId] = useState<string | null>(null);
+  const [updatingTodoId, setUpdatingTodoId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Debounce search query to avoid excessive API calls
+  const debouncedSearchQuery = useDebounce(searchQuery, 300); // 300ms delay
 
   const createTodoMutation = useCreateTodo();
   const deleteTodoMutation = useDeleteTodo();
+  const updateTodoMutation = useUpdateTodo();
   const { showToast } = useToast();
 
-  const handleToggleComplete = (id: string) => {
-    // TODO: Implement toggle complete functionality
-    console.log("Toggle complete for todo:", id);
+  const handleToggleComplete = (todo: Todo) => {
+    updateTodoMutation.mutate(
+      {
+        id: todo.id,
+        data: { completed: !todo.completed },
+      },
+      {
+        onSuccess: () => {
+          showToast("success", `Todo marked as ${!todo.completed ? "completed" : "pending"}!`);
+        },
+        onError: (error) => {
+          console.error("Failed to update todo:", error);
+          showToast("error", "Failed to update todo. Please try again.");
+        },
+      }
+    );
   };
 
-  const handleEdit = (id: string) => {
-    // TODO: Implement edit functionality
-    console.log("Edit todo:", id);
+  const handleEdit = (id: string, data: UpdateTodoRequest) => {
+    setUpdatingTodoId(id);
+    updateTodoMutation.mutate(
+      { id, data },
+      {
+        onSuccess: () => {
+          setUpdatingTodoId(null);
+          showToast("success", "Todo updated successfully!");
+        },
+        onError: (error) => {
+          setUpdatingTodoId(null);
+          console.error("Failed to update todo:", error);
+          showToast("error", "Failed to update todo. Please try again.");
+        },
+      }
+    );
   };
 
   const handleDelete = (id: string) => {
@@ -54,6 +88,17 @@ const TodosPage: React.FC = () => {
       },
     });
   };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to top when changing pages
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Reset to first page when search or filter changes
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchQuery, filterCompleted]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -167,12 +212,15 @@ const TodosPage: React.FC = () => {
         {/* Enhanced Todo List */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
           <TodoList
-            search={searchQuery || undefined}
+            page={currentPage}
+            search={debouncedSearchQuery || undefined}
             completed={filterCompleted}
             onToggleComplete={handleToggleComplete}
             onEdit={handleEdit}
             onDelete={handleDelete}
             deletingTodoId={deletingTodoId}
+            updatingTodoId={updatingTodoId}
+            onPageChange={handlePageChange}
           />
         </div>
       </main>

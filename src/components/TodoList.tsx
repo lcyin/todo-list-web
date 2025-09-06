@@ -1,16 +1,20 @@
 import React from "react";
 import { useGetTodos } from "../hooks/useGetTodos";
 import { TodoItem } from "./";
+import type { Todo } from "../api/models/Todo";
+import type { UpdateTodoRequest } from "../api/models/UpdateTodoRequest";
 
 interface TodoListProps {
   page?: number;
   limit?: number;
   completed?: boolean;
   search?: string;
-  onToggleComplete?: (id: string) => void;
-  onEdit?: (id: string) => void;
+  onToggleComplete?: (todo: Todo) => void;
+  onEdit?: (id: string, data: UpdateTodoRequest) => void;
   onDelete?: (id: string) => void;
   deletingTodoId?: string | null;
+  updatingTodoId?: string | null;
+  onPageChange?: (page: number) => void;
 }
 
 const TodoList: React.FC<TodoListProps> = ({
@@ -22,6 +26,8 @@ const TodoList: React.FC<TodoListProps> = ({
   onEdit,
   onDelete,
   deletingTodoId,
+  updatingTodoId,
+  onPageChange,
 }) => {
   const { data, isLoading, error } = useGetTodos({
     page,
@@ -113,9 +119,9 @@ const TodoList: React.FC<TodoListProps> = ({
   // Render todos list
   return (
     <div className="space-y-4">
-      {/* Enhanced Pagination info */}
+      {/* Enhanced Pagination info and controls */}
       {data.pagination && (
-        <div className="flex items-center justify-between text-sm text-gray-600 bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 rounded-xl border border-gray-200">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-600 bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 rounded-xl border border-gray-200">
           <div className="flex items-center space-x-2">
             <svg
               className="w-4 h-4 text-gray-500"
@@ -139,24 +145,84 @@ const TodoList: React.FC<TodoListProps> = ({
               of {data.pagination.total || 0} todos
             </span>
           </div>
-          {data.pagination.totalPages && data.pagination.totalPages > 1 && (
+
+          {/* Pagination Controls */}
+          {data.pagination.totalPages && data.pagination.totalPages > 1 && onPageChange && (
             <div className="flex items-center space-x-2">
-              <svg
-                className="w-4 h-4 text-gray-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              {/* Previous Button */}
+              <button
+                onClick={() => onPageChange((data.pagination?.page || 1) - 1)}
+                disabled={(data.pagination?.page || 1) <= 1}
+                className={`flex items-center space-x-1 px-3 py-2 rounded-lg border transition-colors ${
+                  (data.pagination?.page || 1) <= 1
+                    ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                    : "border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400"
+                }`}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                />
-              </svg>
-              <span className="font-medium">
-                Page {data.pagination.page || 1} of {data.pagination.totalPages}
-              </span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+                <span>Previous</span>
+              </button>
+
+              {/* Page Numbers */}
+              <div className="flex items-center space-x-1">
+                {Array.from({ length: Math.min(5, data.pagination.totalPages) }, (_, i) => {
+                  const currentPage = data.pagination?.page || 1;
+                  const totalPages = data.pagination?.totalPages || 1;
+
+                  // Calculate which page numbers to show
+                  let startPage = Math.max(1, currentPage - 2);
+                  const endPage = Math.min(totalPages, startPage + 4);
+
+                  if (endPage - startPage < 4) {
+                    startPage = Math.max(1, endPage - 4);
+                  }
+
+                  const pageNum = startPage + i;
+                  if (pageNum > endPage) return null;
+
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => onPageChange(pageNum)}
+                      className={`w-8 h-8 rounded-lg border transition-colors ${
+                        pageNum === currentPage
+                          ? "bg-blue-600 border-blue-600 text-white"
+                          : "border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={() => onPageChange((data.pagination?.page || 1) + 1)}
+                disabled={(data.pagination?.page || 1) >= (data.pagination?.totalPages || 1)}
+                className={`flex items-center space-x-1 px-3 py-2 rounded-lg border transition-colors ${
+                  (data.pagination?.page || 1) >= (data.pagination?.totalPages || 1)
+                    ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                    : "border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400"
+                }`}
+              >
+                <span>Next</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
             </div>
           )}
         </div>
@@ -168,10 +234,11 @@ const TodoList: React.FC<TodoListProps> = ({
           <TodoItem
             key={todo.id}
             todo={todo}
-            onToggleComplete={onToggleComplete}
+            onToggleComplete={onToggleComplete ? () => onToggleComplete(todo) : undefined}
             onEdit={onEdit}
             onDelete={onDelete}
             isDeleting={deletingTodoId === todo.id}
+            isUpdating={updatingTodoId === todo.id}
           />
         ))}
       </div>

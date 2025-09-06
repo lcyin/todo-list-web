@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import type { Todo } from "../api/models/Todo";
+import type { UpdateTodoRequest } from "../api/models/UpdateTodoRequest";
 
 interface TodoItemProps {
   todo: Todo;
-  onToggleComplete?: (id: string) => void;
-  onEdit?: (id: string) => void;
+  onToggleComplete?: (todo: Todo) => void;
+  onEdit?: (id: string, data: UpdateTodoRequest) => void;
   onDelete?: (id: string) => void;
   isDeleting?: boolean;
+  isUpdating?: boolean;
 }
 
 const TodoItem: React.FC<TodoItemProps> = ({
@@ -15,7 +17,12 @@ const TodoItem: React.FC<TodoItemProps> = ({
   onEdit,
   onDelete,
   isDeleting = false,
+  isUpdating = false,
 }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(todo.title);
+  const [editDescription, setEditDescription] = useState(todo.description || "");
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -24,6 +31,26 @@ const TodoItem: React.FC<TodoItemProps> = ({
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  const handleEditSubmit = () => {
+    if (!editTitle.trim()) return;
+
+    onEdit?.(todo.id, {
+      title: editTitle.trim(),
+      description: editDescription.trim() || null,
+    });
+    setIsEditing(false);
+  };
+
+  const handleEditCancel = () => {
+    setEditTitle(todo.title);
+    setEditDescription(todo.description || "");
+    setIsEditing(false);
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
   };
 
   return (
@@ -38,7 +65,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
         <div className="flex items-start space-x-4 flex-1">
           {/* Enhanced Checkbox */}
           <button
-            onClick={() => onToggleComplete?.(todo.id)}
+            onClick={() => onToggleComplete?.(todo)}
             className={`mt-1 w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-200 ${
               todo.completed
                 ? "bg-green-500 border-green-500 text-white shadow-sm scale-105"
@@ -59,62 +86,107 @@ const TodoItem: React.FC<TodoItemProps> = ({
 
           {/* Todo content */}
           <div className="flex-1 min-w-0">
-            <h3
-              className={`text-lg font-semibold leading-tight mb-1 ${
-                todo.completed
-                  ? "text-gray-500 line-through"
-                  : "text-gray-900 group-hover:text-gray-800"
-              }`}
-            >
-              {todo.title}
-            </h3>
-
-            {todo.description && (
-              <p
-                className={`text-sm leading-relaxed mb-3 ${
-                  todo.completed ? "text-gray-400" : "text-gray-600"
-                }`}
-              >
-                {todo.description}
-              </p>
-            )}
-
-            {/* Enhanced Timestamps */}
-            <div className="flex flex-wrap gap-4 text-xs text-gray-400">
-              <div className="flex items-center space-x-1">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6v6l4 2"
-                  />
-                  <circle cx="12" cy="12" r="10" />
-                </svg>
-                <span>Created {formatDate(todo.createdAt)}</span>
-              </div>
-              {todo.updatedAt !== todo.createdAt && (
-                <div className="flex items-center space-x-1">
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                    />
-                  </svg>
-                  <span>Updated {formatDate(todo.updatedAt)}</span>
+            {isEditing ? (
+              /* Edit Mode */
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  className="w-full text-lg font-semibold border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Todo title..."
+                  autoFocus
+                />
+                <textarea
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                  placeholder="Add description (optional)..."
+                  rows={2}
+                />
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={handleEditSubmit}
+                    disabled={!editTitle.trim() || isUpdating}
+                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  >
+                    {isUpdating ? "Saving..." : "Save"}
+                  </button>
+                  <button
+                    onClick={handleEditCancel}
+                    disabled={isUpdating}
+                    className="bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
                 </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              /* Display Mode */
+              <div>
+                <h3
+                  className={`text-lg font-semibold leading-tight mb-1 ${
+                    todo.completed
+                      ? "text-gray-500 line-through"
+                      : "text-gray-900 group-hover:text-gray-800"
+                  }`}
+                >
+                  {todo.title}
+                </h3>
+
+                {todo.description && (
+                  <p
+                    className={`text-sm leading-relaxed mb-3 ${
+                      todo.completed ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
+                    {todo.description}
+                  </p>
+                )}
+
+                {/* Enhanced Timestamps */}
+                <div className="flex flex-wrap gap-4 text-xs text-gray-400">
+                  <div className="flex items-center space-x-1">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v6l4 2"
+                      />
+                      <circle cx="12" cy="12" r="10" />
+                    </svg>
+                    <span>Created {formatDate(todo.createdAt)}</span>
+                  </div>
+                  {todo.updatedAt !== todo.createdAt && (
+                    <div className="flex items-center space-x-1">
+                      <svg
+                        className="w-3 h-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        />
+                      </svg>
+                      <span>Updated {formatDate(todo.updatedAt)}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Enhanced Action buttons */}
         <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          {onEdit && (
+          {onEdit && !isEditing && (
             <button
-              onClick={() => onEdit(todo.id)}
+              onClick={handleEditClick}
               className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
               title="Edit todo"
             >
@@ -129,7 +201,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
             </button>
           )}
 
-          {onDelete && (
+          {onDelete && !isEditing && (
             <button
               onClick={() => onDelete(todo.id)}
               disabled={isDeleting}
