@@ -60,8 +60,6 @@ Ready to begin Sprint 1: Read & Display Todos
 ### 📚 Documentation
 
 - **[.copilot-instructions.md](./.copilot-instructions.md)** - Main Copilot instructions for the project
-- **[PROJECT_RULES.md](./.copilot-instructions/PROJECT_RULES.md)** - Comprehensive development rules and guidelines
-- **[QUICK_REFERENCE.md](./.copilot-instructions/QUICK_REFERENCE.md)** - Developer quick reference card
 - **[development-plan.md](./development-plan.md)** - Detailed development roadmap
 
 ---
