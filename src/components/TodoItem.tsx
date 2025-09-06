@@ -54,26 +54,42 @@ const TodoItem: React.FC<TodoItemProps> = ({
   };
 
   return (
-    <div className="group bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-lg hover:border-gray-300 transition-all duration-200 relative overflow-hidden">
+    <article
+      className="group bg-white border border-gray-200 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-lg hover:border-gray-300 transition-all duration-200 relative overflow-hidden"
+      role="article"
+      aria-labelledby={`todo-title-${todo.id}`}
+      aria-describedby={todo.description ? `todo-description-${todo.id}` : undefined}
+    >
       {/* Completion indicator bar */}
       {todo.completed && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-green-500"></div>
+        <div
+          className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-green-500"
+          role="presentation"
+        ></div>
       )}
 
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-3 sm:gap-4">
         {/* Main content */}
-        <div className="flex items-start space-x-4 flex-1">
+        <div className="flex items-start space-x-3 sm:space-x-4 flex-1 min-w-0">
           {/* Enhanced Checkbox */}
           <button
             onClick={() => onToggleComplete?.(todo)}
-            className={`mt-1 w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-200 ${
+            className={`mt-1 w-5 h-5 sm:w-6 sm:h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 ${
               todo.completed
                 ? "bg-green-500 border-green-500 text-white shadow-sm scale-105"
                 : "border-gray-300 hover:border-green-400 hover:bg-green-50 focus:border-green-500"
             }`}
+            aria-label={`Mark "${todo.title}" as ${todo.completed ? "pending" : "completed"}`}
+            aria-pressed={todo.completed}
+            role="switch"
           >
             {todo.completed && (
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-3 h-3 sm:w-4 sm:h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -125,7 +141,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
               /* Display Mode */
               <div>
                 <h3
-                  className={`text-lg font-semibold leading-tight mb-1 ${
+                  id={`todo-title-${todo.id}`}
+                  className={`text-base sm:text-lg font-semibold leading-tight mb-1 ${
                     todo.completed
                       ? "text-gray-500 line-through"
                       : "text-gray-900 group-hover:text-gray-800"
@@ -136,7 +153,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
 
                 {todo.description && (
                   <p
-                    className={`text-sm leading-relaxed mb-3 ${
+                    id={`todo-description-${todo.id}`}
+                    className={`text-sm leading-relaxed mb-2 sm:mb-3 ${
                       todo.completed ? "text-gray-400" : "text-gray-600"
                     }`}
                   >
@@ -145,7 +163,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
                 )}
 
                 {/* Enhanced Timestamps */}
-                <div className="flex flex-wrap gap-4 text-xs text-gray-400">
+                <div className="flex flex-wrap gap-2 sm:gap-4 text-xs text-gray-400">
                   <div className="flex items-center space-x-1">
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
@@ -183,12 +201,12 @@ const TodoItem: React.FC<TodoItemProps> = ({
         </div>
 
         {/* Enhanced Action buttons */}
-        <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div className="flex items-center space-x-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0">
           {onEdit && !isEditing && (
             <button
               onClick={handleEditClick}
-              className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
-              title="Edit todo"
+              className="p-2 sm:p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
+              aria-label={`Edit "${todo.title}"`}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -205,12 +223,12 @@ const TodoItem: React.FC<TodoItemProps> = ({
             <button
               onClick={() => onDelete(todo.id)}
               disabled={isDeleting}
-              className={`p-2.5 rounded-lg transition-all duration-200 ${
+              className={`p-2 sm:p-2.5 rounded-lg transition-all duration-200 ${
                 isDeleting
                   ? "text-gray-300 cursor-not-allowed"
                   : "text-gray-400 hover:text-red-600 hover:bg-red-50"
               }`}
-              title={isDeleting ? "Deleting..." : "Delete todo"}
+              aria-label={isDeleting ? `Deleting "${todo.title}"...` : `Delete "${todo.title}"`}
             >
               {isDeleting ? (
                 <div className="w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
@@ -228,7 +246,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 

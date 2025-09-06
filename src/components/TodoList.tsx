@@ -118,7 +118,7 @@ const TodoList: React.FC<TodoListProps> = ({
 
   // Render todos list
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" role="region" aria-label="Todo items list">
       {/* Enhanced Pagination info and controls */}
       {data.pagination && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-600 bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 rounded-xl border border-gray-200">
@@ -148,7 +148,7 @@ const TodoList: React.FC<TodoListProps> = ({
 
           {/* Pagination Controls */}
           {data.pagination.totalPages && data.pagination.totalPages > 1 && onPageChange && (
-            <div className="flex items-center space-x-2">
+            <nav className="flex items-center space-x-2" aria-label="Todo list pagination">
               {/* Previous Button */}
               <button
                 onClick={() => onPageChange((data.pagination?.page || 1) - 1)}
@@ -158,6 +158,7 @@ const TodoList: React.FC<TodoListProps> = ({
                     ? "border-gray-200 text-gray-400 cursor-not-allowed"
                     : "border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400"
                 }`}
+                aria-label="Go to previous page"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -196,6 +197,8 @@ const TodoList: React.FC<TodoListProps> = ({
                           ? "bg-blue-600 border-blue-600 text-white"
                           : "border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400"
                       }`}
+                      aria-label={`Go to page ${pageNum}`}
+                      aria-current={pageNum === currentPage ? "page" : undefined}
                     >
                       {pageNum}
                     </button>
@@ -212,6 +215,7 @@ const TodoList: React.FC<TodoListProps> = ({
                     ? "border-gray-200 text-gray-400 cursor-not-allowed"
                     : "border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400"
                 }`}
+                aria-label="Go to next page"
               >
                 <span>Next</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -223,7 +227,7 @@ const TodoList: React.FC<TodoListProps> = ({
                   />
                 </svg>
               </button>
-            </div>
+            </nav>
           )}
         </div>
       )}

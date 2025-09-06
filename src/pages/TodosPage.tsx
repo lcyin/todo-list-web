@@ -104,17 +104,29 @@ const TodosPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Enhanced Header */}
       <header className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-1">My Todo List</h1>
-              <p className="text-gray-600 text-lg">Organize your tasks and stay productive</p>
+        <div className="container mx-auto px-4 py-4 sm:py-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex-1">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1">
+                My Todo List
+              </h1>
+              <p className="text-gray-600 text-sm sm:text-base lg:text-lg">
+                Organize your tasks and stay productive
+              </p>
             </div>
             <button
               onClick={handleAddTodo}
-              className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 flex items-center space-x-3 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-xl font-semibold transition-all duration-200 flex items-center space-x-2 sm:space-x-3 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full sm:w-auto justify-center sm:justify-start"
+              aria-expanded={showAddForm}
+              aria-controls="add-todo-form"
+              aria-label={showAddForm ? "Cancel adding new todo" : "Add new todo"}
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-5 h-5 sm:w-6 sm:h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -129,15 +141,24 @@ const TodosPage: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-6 sm:py-8">
         {/* Add Todo Form */}
         {showAddForm && (
-          <AddTodoForm onSubmit={handleCreateTodo} isLoading={createTodoMutation.isPending} />
+          <div id="add-todo-form" role="region" aria-labelledby="add-todo-heading">
+            <AddTodoForm onSubmit={handleCreateTodo} isLoading={createTodoMutation.isPending} />
+          </div>
         )}
 
         {/* Enhanced Filters and Search */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between space-y-6 md:space-y-0 md:space-x-8">
+        <section
+          className="bg-white rounded-2xl shadow-lg border border-gray-200 p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8"
+          role="search"
+          aria-labelledby="search-filters-heading"
+        >
+          <h2 id="search-filters-heading" className="sr-only">
+            Search and filter todos
+          </h2>
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between space-y-4 lg:space-y-0 lg:space-x-8">
             {/* Enhanced Search */}
             <div className="flex-1">
               <label htmlFor="search" className="block text-sm font-semibold text-gray-700 mb-3">
@@ -186,7 +207,7 @@ const TodosPage: React.FC = () => {
             </div>
 
             {/* Enhanced Filter */}
-            <div className="md:w-64">
+            <div className="lg:w-64">
               <label htmlFor="filter" className="block text-sm font-semibold text-gray-700 mb-3">
                 Filter by status
               </label>
@@ -207,10 +228,16 @@ const TodosPage: React.FC = () => {
               </select>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Enhanced Todo List */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+        <section
+          className="bg-white rounded-2xl shadow-lg border border-gray-200 p-4 sm:p-6 lg:p-8"
+          aria-labelledby="todo-list-heading"
+        >
+          <h2 id="todo-list-heading" className="sr-only">
+            Todo list
+          </h2>
           <TodoList
             page={currentPage}
             search={debouncedSearchQuery || undefined}
@@ -222,7 +249,7 @@ const TodosPage: React.FC = () => {
             updatingTodoId={updatingTodoId}
             onPageChange={handlePageChange}
           />
-        </div>
+        </section>
       </main>
     </div>
   );

@@ -30,7 +30,12 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
       {children}
 
       {/* Toast Container */}
-      <div className="fixed top-4 right-4 z-50 space-y-2">
+      <div
+        className="fixed top-4 right-4 z-50 space-y-2"
+        role="region"
+        aria-label="Notifications"
+        aria-live="polite"
+      >
         {toasts.map((toast) => (
           <ToastItem key={toast.id} toast={toast} onRemove={removeToast} />
         ))}
@@ -62,6 +67,8 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
       className={`transform transition-all duration-300 ease-in-out ${
         isVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
       }`}
+      role="alert"
+      aria-live="assertive"
     >
       <div
         className={`max-w-sm w-full shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden ${
@@ -118,6 +125,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
                     : "text-red-400 hover:text-red-500 focus:ring-red-500"
                 }`}
                 onClick={handleRemove}
+                aria-label="Close notification"
               >
                 <span className="sr-only">Close</span>
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -46,8 +46,10 @@ export const AddTodoForm: React.FC<AddTodoFormProps> = ({ onSubmit, isLoading = 
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">Add New Todo</h2>
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-4 sm:mb-6">
+      <h2 id="add-todo-heading" className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
+        Add New Todo
+      </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -97,7 +99,7 @@ export const AddTodoForm: React.FC<AddTodoFormProps> = ({ onSubmit, isLoading = 
           <button
             type="submit"
             disabled={isLoading || !title.trim()}
-            className={`px-6 py-2 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+            className={`w-full sm:w-auto px-6 py-2 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
               isLoading || !title.trim()
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                 : "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-md hover:shadow-lg"
