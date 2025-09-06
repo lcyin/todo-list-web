@@ -46,76 +46,147 @@ export const AddTodoForm: React.FC<AddTodoFormProps> = ({ onSubmit, isLoading = 
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-4 sm:mb-6">
-      <h2 id="add-todo-heading" className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-        Add New Todo
-      </h2>
+    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 p-6 sm:p-8 mb-6 sm:mb-8 relative overflow-hidden">
+      {/* Decorative gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 rounded-2xl"></div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-            Title *
-          </label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={handleTitleChange}
-            disabled={isLoading}
-            placeholder="Enter todo title..."
-            className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-              titleError
-                ? "border-red-300 bg-red-50"
-                : "border-gray-300 bg-white hover:border-gray-400"
-            } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-            aria-invalid={!!titleError}
-            aria-describedby={titleError ? "title-error" : undefined}
-          />
-          {titleError && (
-            <p id="title-error" className="mt-1 text-sm text-red-600" role="alert">
-              {titleError}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-            Description (optional)
-          </label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            disabled={isLoading}
-            placeholder="Enter todo description..."
-            rows={3}
-            className={`w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white hover:border-gray-400 transition-colors resize-vertical ${
-              isLoading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          />
-        </div>
-
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={isLoading || !title.trim()}
-            className={`w-full sm:w-auto px-6 py-2 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-              isLoading || !title.trim()
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-md hover:shadow-lg"
-            }`}
+      <div className="relative z-10">
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+            <svg
+              className="w-5 h-5 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2.5}
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+          </div>
+          <h2
+            id="add-todo-heading"
+            className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent"
           >
-            {isLoading ? (
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Adding...</span>
-              </div>
-            ) : (
-              "Add Todo"
-            )}
-          </button>
+            Create New Todo
+          </h2>
         </div>
-      </form>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label htmlFor="title" className="block text-sm font-semibold text-gray-700">
+              Title *
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                id="title"
+                value={title}
+                onChange={handleTitleChange}
+                disabled={isLoading}
+                placeholder="What needs to be done?"
+                className={`w-full px-4 py-3 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 text-lg ${
+                  titleError
+                    ? "border-red-300 bg-red-50/50 focus:border-red-500 focus:ring-red-500/20"
+                    : "border-gray-200 bg-white/50 hover:border-gray-300 hover:bg-white/70"
+                } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+                aria-invalid={!!titleError}
+                aria-describedby={titleError ? "title-error" : undefined}
+              />
+              {title && !titleError && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <svg
+                      className="w-3 h-3 text-green-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={3}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              )}
+            </div>
+            {titleError && (
+              <div className="flex items-center space-x-2 mt-2">
+                <svg
+                  className="w-4 h-4 text-red-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <p id="title-error" className="text-sm text-red-600 font-medium" role="alert">
+                  {titleError}
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="description" className="block text-sm font-semibold text-gray-700">
+              Description <span className="text-gray-400 font-normal">(optional)</span>
+            </label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              disabled={isLoading}
+              placeholder="Add more details about this todo..."
+              rows={4}
+              className={`w-full px-4 py-3 border-2 border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 bg-white/50 hover:border-gray-300 hover:bg-white/70 transition-all duration-200 resize-none ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            />
+          </div>
+
+          <div className="flex justify-end pt-4">
+            <button
+              type="submit"
+              disabled={isLoading || !title.trim()}
+              className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-4 transform hover:scale-105 ${
+                isLoading || !title.trim()
+                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl focus:ring-blue-500/50"
+              }`}
+            >
+              {isLoading ? (
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <span>Creating...</span>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    />
+                  </svg>
+                  <span>Create Todo</span>
+                </div>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

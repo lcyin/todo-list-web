@@ -64,54 +64,64 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
 
   return (
     <div
-      className={`transform transition-all duration-300 ease-in-out ${
-        isVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+      className={`transform transition-all duration-500 ease-out ${
+        isVisible ? "translate-x-0 opacity-100 scale-100" : "translate-x-full opacity-0 scale-95"
       }`}
       role="alert"
       aria-live="assertive"
     >
       <div
-        className={`max-w-sm w-full shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden ${
-          toast.type === "success" ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"
+        className={`max-w-sm w-full shadow-2xl rounded-2xl pointer-events-auto ring-1 ring-black/5 overflow-hidden backdrop-blur-lg ${
+          toast.type === "success"
+            ? "bg-gradient-to-br from-emerald-50/95 to-green-50/95 border-l-4 border-emerald-500"
+            : "bg-gradient-to-br from-red-50/95 to-rose-50/95 border-l-4 border-red-500"
         }`}
       >
-        <div className="p-4">
+        <div className="p-5">
           <div className="flex items-start">
             <div className="flex-shrink-0">
-              {toast.type === "success" ? (
-                <svg
-                  className="h-6 w-6 text-green-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="h-6 w-6 text-red-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              )}
+              <div
+                className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                  toast.type === "success"
+                    ? "bg-gradient-to-br from-emerald-500 to-green-600 shadow-lg shadow-emerald-500/25"
+                    : "bg-gradient-to-br from-red-500 to-rose-600 shadow-lg shadow-red-500/25"
+                }`}
+              >
+                {toast.type === "success" ? (
+                  <svg
+                    className="h-6 w-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="h-6 w-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                )}
+              </div>
             </div>
-            <div className="ml-3 w-0 flex-1 pt-0.5">
+            <div className="ml-4 w-0 flex-1 pt-1">
               <p
-                className={`text-sm font-medium ${
-                  toast.type === "success" ? "text-green-900" : "text-red-900"
+                className={`text-sm font-semibold ${
+                  toast.type === "success" ? "text-emerald-900" : "text-red-900"
                 }`}
               >
                 {toast.message}
@@ -119,10 +129,10 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
             </div>
             <div className="ml-4 flex-shrink-0 flex">
               <button
-                className={`rounded-md inline-flex focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                className={`rounded-xl inline-flex p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 hover:scale-110 ${
                   toast.type === "success"
-                    ? "text-green-400 hover:text-green-500 focus:ring-green-500"
-                    : "text-red-400 hover:text-red-500 focus:ring-red-500"
+                    ? "text-emerald-400 hover:text-emerald-600 hover:bg-emerald-100 focus:ring-emerald-500"
+                    : "text-red-400 hover:text-red-600 hover:bg-red-100 focus:ring-red-500"
                 }`}
                 onClick={handleRemove}
                 aria-label="Close notification"
@@ -139,6 +149,16 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
               </button>
             </div>
           </div>
+        </div>
+
+        {/* Progress bar */}
+        <div className={`h-1 w-full ${toast.type === "success" ? "bg-emerald-200" : "bg-red-200"}`}>
+          <div
+            className={`h-full transition-all duration-[4000ms] ease-linear ${
+              toast.type === "success" ? "bg-emerald-500" : "bg-red-500"
+            }`}
+            style={{ width: isVisible ? "0%" : "100%" }}
+          ></div>
         </div>
       </div>
     </div>
