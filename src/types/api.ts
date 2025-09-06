@@ -24,10 +24,12 @@ export interface Pagination {
   limit: number;
   total: number;
   totalPages: number;
+  hasNext?: boolean;
+  hasPrevious?: boolean;
 }
 
 export interface TodosResponse {
-  data: Todo[];
+  todos: Todo[];
   pagination: Pagination;
 }
 

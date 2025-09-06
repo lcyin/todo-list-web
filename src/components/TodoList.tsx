@@ -18,6 +18,11 @@ export const TodoList: React.FC = () => {
     deleteTodo,
   } = useTodos();
 
+  // Debug logging
+  console.log("TodoList render - todos:", todos);
+  console.log("TodoList render - pagination:", pagination);
+  console.log("TodoList render - isLoading:", isLoading);
+
   const handlePageChange = (page: number) => {
     setFilters({ ...filters, page });
   };
@@ -42,6 +47,31 @@ export const TodoList: React.FC = () => {
       <section className="add-todo-section">
         <h2>Add New Todo</h2>
         <TodoForm onSubmit={createTodo} isLoading={isLoading} />
+
+        {/* Debug button to test API */}
+        <button
+          onClick={async () => {
+            try {
+              const response = await fetch("/api/v1/todos");
+              const data = await response.json();
+              console.log("Direct API test:", data);
+              alert(`Direct API test: ${JSON.stringify(data, null, 2)}`);
+            } catch (err) {
+              console.error("Direct API test failed:", err);
+              alert(`API test failed: ${err}`);
+            }
+          }}
+          style={{
+            marginTop: "10px",
+            padding: "10px",
+            backgroundColor: "#007bff",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+          }}
+        >
+          Test API Connection
+        </button>
       </section>
 
       <section className="filters-section">

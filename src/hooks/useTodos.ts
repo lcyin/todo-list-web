@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Todo, TodoFilters, Pagination } from "../types/api";
 import { todoApi } from "../services/api";
 
@@ -34,9 +34,13 @@ export const useTodos = (): UseTodosReturn => {
 
     try {
       const response = await todoApi.getTodos(filters);
-      setTodos(response.data.data || []);
+      console.log("API Response:", response.data);
+      console.log("Todos data:", response.data.todos);
+      console.log("Pagination:", response.data.pagination);
+      setTodos(response.data.todos || []);
       setPagination(response.data.pagination || null);
     } catch (err: any) {
+      console.error("API Error:", err);
       setError(err.response?.data?.error?.message || "Failed to fetch todos");
       setTodos([]); // Ensure todos is always an array even on error
     } finally {
