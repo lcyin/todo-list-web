@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import { TodoList } from "../components";
+import { TodoList, AddTodoForm } from "../components";
+import { useCreateTodo, useDeleteTodo, useToast } from "../hooks";
+import type { CreateTodoRequest } from "../api/models/CreateTodoRequest";
 
 const TodosPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCompleted, setFilterCompleted] = useState<boolean | undefined>(undefined);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [deletingTodoId, setDeletingTodoId] = useState<string | null>(null);
+
+  const createTodoMutation = useCreateTodo();
+  const deleteTodoMutation = useDeleteTodo();
+  const { showToast } = useToast();
 
   const handleToggleComplete = (id: string) => {
     // TODO: Implement toggle complete functionality
@@ -16,13 +24,35 @@ const TodosPage: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-    // TODO: Implement delete functionality
-    console.log("Delete todo:", id);
+    setDeletingTodoId(id);
+    deleteTodoMutation.mutate(id, {
+      onSuccess: () => {
+        setDeletingTodoId(null);
+        showToast("success", "Todo deleted successfully!");
+      },
+      onError: (error) => {
+        setDeletingTodoId(null);
+        console.error("Failed to delete todo:", error);
+        showToast("error", "Failed to delete todo. Please try again.");
+      },
+    });
   };
 
   const handleAddTodo = () => {
-    // TODO: Implement add todo functionality
-    console.log("Add new todo");
+    setShowAddForm(!showAddForm);
+  };
+
+  const handleCreateTodo = (todoData: CreateTodoRequest) => {
+    createTodoMutation.mutate(todoData, {
+      onSuccess: () => {
+        setShowAddForm(false);
+        showToast("success", "Todo created successfully!");
+      },
+      onError: (error) => {
+        console.error("Failed to create todo:", error);
+        showToast("error", "Failed to create todo. Please try again.");
+      },
+    });
   };
 
   return (
@@ -44,10 +74,10 @@ const TodosPage: React.FC = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2.5}
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  d={showAddForm ? "M6 18L18 6M6 6l12 12" : "M12 6v6m0 0v6m0-6h6m-6 0H6"}
                 />
               </svg>
-              <span>Add Todo</span>
+              <span>{showAddForm ? "Cancel" : "Add Todo"}</span>
             </button>
           </div>
         </div>
@@ -55,6 +85,11 @@ const TodosPage: React.FC = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
+        {/* Add Todo Form */}
+        {showAddForm && (
+          <AddTodoForm onSubmit={handleCreateTodo} isLoading={createTodoMutation.isPending} />
+        )}
+
         {/* Enhanced Filters and Search */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between space-y-6 md:space-y-0 md:space-x-8">
@@ -137,6 +172,7 @@ const TodosPage: React.FC = () => {
             onToggleComplete={handleToggleComplete}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            deletingTodoId={deletingTodoId}
           />
         </div>
       </main>

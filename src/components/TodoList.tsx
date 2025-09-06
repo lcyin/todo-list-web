@@ -10,6 +10,7 @@ interface TodoListProps {
   onToggleComplete?: (id: string) => void;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
+  deletingTodoId?: string | null;
 }
 
 const TodoList: React.FC<TodoListProps> = ({
@@ -20,6 +21,7 @@ const TodoList: React.FC<TodoListProps> = ({
   onToggleComplete,
   onEdit,
   onDelete,
+  deletingTodoId,
 }) => {
   const { data, isLoading, error } = useGetTodos({
     page,
@@ -169,6 +171,7 @@ const TodoList: React.FC<TodoListProps> = ({
             onToggleComplete={onToggleComplete}
             onEdit={onEdit}
             onDelete={onDelete}
+            isDeleting={deletingTodoId === todo.id}
           />
         ))}
       </div>
