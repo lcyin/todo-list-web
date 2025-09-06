@@ -31,10 +31,13 @@ const TodoList: React.FC<TodoListProps> = ({
   // Loading spinner
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="flex items-center space-x-2">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="text-gray-600 text-lg">Loading todos...</span>
+      <div className="flex items-center justify-center py-16">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="relative">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent absolute top-0 left-0"></div>
+          </div>
+          <span className="text-gray-600 text-lg font-medium">Loading your todos...</span>
         </div>
       </div>
     );
@@ -43,28 +46,36 @@ const TodoList: React.FC<TodoListProps> = ({
   // Error state
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-        <div className="flex items-center space-x-3">
+      <div className="bg-red-50 border-2 border-red-200 rounded-xl p-8">
+        <div className="flex items-start space-x-4">
           <div className="flex-shrink-0">
-            <svg
-              className="h-6 w-6 text-red-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+              <svg
+                className="h-6 w-6 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
           </div>
-          <div>
-            <h3 className="text-lg font-medium text-red-800">Error loading todos</h3>
-            <p className="text-red-600 mt-1">
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-red-800 mb-2">Error loading todos</h3>
+            <p className="text-red-700 leading-relaxed">
               {error instanceof Error ? error.message : "An unexpected error occurred"}
             </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            >
+              Try Again
+            </button>
           </div>
         </div>
       </div>
@@ -74,9 +85,9 @@ const TodoList: React.FC<TodoListProps> = ({
   // No todos found
   if (!data?.data || data.data.length === 0) {
     return (
-      <div className="text-center py-12">
-        <div className="mx-auto h-24 w-24 text-gray-300 mb-4">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="text-center py-16">
+        <div className="mx-auto h-32 w-32 text-gray-300 mb-6">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -85,13 +96,13 @@ const TodoList: React.FC<TodoListProps> = ({
             />
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No todos found</h3>
-        <p className="text-gray-500">
+        <h3 className="text-xl font-semibold text-gray-900 mb-3">No todos found</h3>
+        <p className="text-gray-600 text-lg max-w-md mx-auto leading-relaxed">
           {search
-            ? `No todos match "${search}"`
+            ? `No todos match "${search}". Try a different search term.`
             : completed !== undefined
-            ? `No ${completed ? "completed" : "pending"} todos`
-            : "Get started by creating your first todo!"}
+            ? `No ${completed ? "completed" : "pending"} todos found.`
+            : "Get started by creating your first todo item!"}
         </p>
       </div>
     );
@@ -100,27 +111,57 @@ const TodoList: React.FC<TodoListProps> = ({
   // Render todos list
   return (
     <div className="space-y-4">
-      {/* Pagination info */}
+      {/* Enhanced Pagination info */}
       {data.pagination && (
-        <div className="flex items-center justify-between text-sm text-gray-600 bg-gray-50 px-4 py-3 rounded-lg">
-          <span>
-            Showing {((data.pagination.page || 1) - 1) * (data.pagination.limit || 10) + 1} to{" "}
-            {Math.min(
-              (data.pagination.page || 1) * (data.pagination.limit || 10),
-              data.pagination.total || 0
-            )}{" "}
-            of {data.pagination.total || 0} todos
-          </span>
-          {data.pagination.totalPages && data.pagination.totalPages > 1 && (
-            <span>
-              Page {data.pagination.page || 1} of {data.pagination.totalPages}
+        <div className="flex items-center justify-between text-sm text-gray-600 bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 rounded-xl border border-gray-200">
+          <div className="flex items-center space-x-2">
+            <svg
+              className="w-4 h-4 text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <span className="font-medium">
+              Showing {((data.pagination.page || 1) - 1) * (data.pagination.limit || 10) + 1} to{" "}
+              {Math.min(
+                (data.pagination.page || 1) * (data.pagination.limit || 10),
+                data.pagination.total || 0
+              )}{" "}
+              of {data.pagination.total || 0} todos
             </span>
+          </div>
+          {data.pagination.totalPages && data.pagination.totalPages > 1 && (
+            <div className="flex items-center space-x-2">
+              <svg
+                className="w-4 h-4 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                />
+              </svg>
+              <span className="font-medium">
+                Page {data.pagination.page || 1} of {data.pagination.totalPages}
+              </span>
+            </div>
           )}
         </div>
       )}
 
-      {/* Todo items */}
-      <div className="space-y-3">
+      {/* Todo items with enhanced spacing */}
+      <div className="space-y-4">
         {data.data.map((todo) => (
           <TodoItem
             key={todo.id}

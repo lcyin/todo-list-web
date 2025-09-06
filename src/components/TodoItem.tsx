@@ -20,25 +20,30 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggleComplete, onEdit, onD
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+    <div className="group bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-lg hover:border-gray-300 transition-all duration-200 relative overflow-hidden">
+      {/* Completion indicator bar */}
+      {todo.completed && (
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-green-500"></div>
+      )}
+
       <div className="flex items-start justify-between">
         {/* Main content */}
-        <div className="flex items-start space-x-3 flex-1">
-          {/* Checkbox */}
+        <div className="flex items-start space-x-4 flex-1">
+          {/* Enhanced Checkbox */}
           <button
             onClick={() => onToggleComplete?.(todo.id)}
-            className={`mt-1 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+            className={`mt-1 w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-200 ${
               todo.completed
-                ? "bg-green-500 border-green-500 text-white"
-                : "border-gray-300 hover:border-green-400"
+                ? "bg-green-500 border-green-500 text-white shadow-sm scale-105"
+                : "border-gray-300 hover:border-green-400 hover:bg-green-50 focus:border-green-500"
             }`}
           >
             {todo.completed && (
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                   d="M5 13l4 4L19 7"
                 />
               </svg>
@@ -46,37 +51,64 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggleComplete, onEdit, onD
           </button>
 
           {/* Todo content */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <h3
-              className={`text-lg font-medium ${
-                todo.completed ? "text-gray-500 line-through" : "text-gray-900"
+              className={`text-lg font-semibold leading-tight mb-1 ${
+                todo.completed
+                  ? "text-gray-500 line-through"
+                  : "text-gray-900 group-hover:text-gray-800"
               }`}
             >
               {todo.title}
             </h3>
 
             {todo.description && (
-              <p className={`mt-1 text-sm ${todo.completed ? "text-gray-400" : "text-gray-600"}`}>
+              <p
+                className={`text-sm leading-relaxed mb-3 ${
+                  todo.completed ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
                 {todo.description}
               </p>
             )}
 
-            {/* Timestamps */}
-            <div className="mt-2 text-xs text-gray-400 space-y-1">
-              <div>Created: {formatDate(todo.createdAt)}</div>
+            {/* Enhanced Timestamps */}
+            <div className="flex flex-wrap gap-4 text-xs text-gray-400">
+              <div className="flex items-center space-x-1">
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6v6l4 2"
+                  />
+                  <circle cx="12" cy="12" r="10" />
+                </svg>
+                <span>Created {formatDate(todo.createdAt)}</span>
+              </div>
               {todo.updatedAt !== todo.createdAt && (
-                <div>Updated: {formatDate(todo.updatedAt)}</div>
+                <div className="flex items-center space-x-1">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
+                  </svg>
+                  <span>Updated {formatDate(todo.updatedAt)}</span>
+                </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* Action buttons */}
-        <div className="flex items-center space-x-2 ml-4">
+        {/* Enhanced Action buttons */}
+        <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           {onEdit && (
             <button
               onClick={() => onEdit(todo.id)}
-              className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+              className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
               title="Edit todo"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,7 +125,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggleComplete, onEdit, onD
           {onDelete && (
             <button
               onClick={() => onDelete(todo.id)}
-              className="p-2 text-gray-400 hover:text-red-600 transition-colors"
+              className="p-2.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
               title="Delete todo"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
