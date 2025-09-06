@@ -55,48 +55,40 @@ const TodoItem: React.FC<TodoItemProps> = ({
 
   return (
     <article
-      className="group bg-white/90 backdrop-blur-sm border border-white/50 rounded-2xl p-5 sm:p-6 shadow-lg hover:shadow-2xl hover:border-blue-200/50 transition-all duration-300 relative overflow-hidden transform hover:-translate-y-1"
+      className="bg-surface border border-border rounded-lg p-md shadow-card hover:shadow-card-hover transition-all duration-200 hover:-translate-y-1"
       role="article"
       aria-labelledby={`todo-title-${todo.id}`}
       aria-describedby={todo.description ? `todo-description-${todo.id}` : undefined}
     >
-      {/* Completion indicator bar with gradient */}
+      {/* Completion indicator bar */}
       {todo.completed && (
         <div
-          className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-green-500 to-teal-500"
+          className="absolute top-0 left-0 right-0 h-1 bg-success rounded-t-lg"
           role="presentation"
         ></div>
       )}
 
-      {/* Subtle background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 to-indigo-50/30 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-      <div className="relative z-10 flex items-start justify-between gap-4 sm:gap-5">
+      <div className="flex items-start justify-between gap-md">
         {/* Main content */}
-        <div className="flex items-start space-x-4 sm:space-x-5 flex-1 min-w-0">
-          {/* Enhanced Checkbox with more sophisticated styling */}
+        <div className="flex items-start space-x-md flex-1 min-w-0">
+          {/* Checkbox */}
           <button
             onClick={() => onToggleComplete?.(todo)}
-            className={`mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded-xl border-2 flex items-center justify-center transition-all duration-300 flex-shrink-0 transform hover:scale-110 ${
+            className={`mt-1 w-6 h-6 rounded-sm border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 transform hover:scale-105 ${
               todo.completed
-                ? "bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-500 text-white shadow-lg shadow-emerald-500/25"
-                : "border-gray-300 hover:border-emerald-400 hover:bg-emerald-50 focus:border-emerald-500 shadow-md hover:shadow-lg"
+                ? "bg-success border-success text-white shadow-button"
+                : "border-border hover:border-success hover:bg-success/10 focus:border-success"
             }`}
             aria-label={`Mark "${todo.title}" as ${todo.completed ? "pending" : "completed"}`}
             aria-pressed={todo.completed}
             role="switch"
           >
             {todo.completed && (
-              <svg
-                className="w-4 h-4 sm:w-5 sm:h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={3}
+                  strokeWidth={2}
                   d="M5 13l4 4L19 7"
                 />
               </svg>
@@ -107,30 +99,30 @@ const TodoItem: React.FC<TodoItemProps> = ({
           <div className="flex-1 min-w-0">
             {isEditing ? (
               /* Edit Mode */
-              <div className="space-y-4">
+              <div className="space-y-md">
                 <input
                   type="text"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="w-full text-lg font-semibold border-2 border-blue-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 bg-white/80 backdrop-blur-sm shadow-lg"
+                  className="w-full text-body font-medium border border-border rounded-sm px-3 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-surface"
                   placeholder="Todo title..."
                   autoFocus
                 />
                 <textarea
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
-                  className="w-full text-sm border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 resize-none bg-white/80 backdrop-blur-sm shadow-lg"
+                  className="w-full text-small border border-border rounded-sm px-3 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none bg-surface"
                   placeholder="Add description (optional)..."
                   rows={3}
                 />
-                <div className="flex items-center space-x-3 pt-2">
+                <div className="flex items-center space-x-sm pt-sm">
                   <button
                     onClick={handleEditSubmit}
                     disabled={!editTitle.trim() || isUpdating}
-                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-gray-300 disabled:to-gray-400 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
+                    className="bg-primary hover:bg-blue-700 disabled:bg-gray-300 text-white px-lg py-2 rounded-sm text-button transition-all duration-200 shadow-button"
                   >
                     {isUpdating ? (
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-sm">
                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         <span>Saving...</span>
                       </div>
@@ -141,7 +133,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
                   <button
                     onClick={handleEditCancel}
                     disabled={isUpdating}
-                    className="bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-gray-700 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
+                    className="bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-textPrimary px-lg py-2 rounded-sm text-button transition-all duration-200"
                   >
                     Cancel
                   </button>
@@ -152,10 +144,10 @@ const TodoItem: React.FC<TodoItemProps> = ({
               <div>
                 <h3
                   id={`todo-title-${todo.id}`}
-                  className={`text-base sm:text-lg font-bold leading-tight mb-2 transition-all duration-200 ${
+                  className={`text-body font-medium leading-tight mb-sm transition-all duration-200 ${
                     todo.completed
-                      ? "text-gray-500 line-through"
-                      : "text-gray-900 group-hover:text-blue-900"
+                      ? "text-textSecondary line-through opacity-60"
+                      : "text-textPrimary"
                   }`}
                 >
                   {todo.title}
@@ -164,20 +156,32 @@ const TodoItem: React.FC<TodoItemProps> = ({
                 {todo.description && (
                   <p
                     id={`todo-description-${todo.id}`}
-                    className={`text-sm leading-relaxed mb-3 sm:mb-4 ${
-                      todo.completed ? "text-gray-400" : "text-gray-600 group-hover:text-gray-700"
+                    className={`text-small leading-relaxed mb-md ${
+                      todo.completed ? "text-textSecondary opacity-60" : "text-textSecondary"
                     }`}
                   >
                     {todo.description}
                   </p>
                 )}
 
-                {/* Enhanced Timestamps with better styling */}
-                <div className="flex flex-wrap gap-3 sm:gap-4 text-xs">
-                  <div className="flex items-center space-x-1.5 text-gray-400 hover:text-gray-600 transition-colors">
-                    <div className="w-4 h-4 bg-blue-100 rounded-full flex items-center justify-center">
+                {/* Timestamps */}
+                <div className="flex flex-wrap gap-md text-xs text-textSecondary">
+                  <div className="flex items-center space-x-1">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v6l4 2"
+                      />
+                      <circle cx="12" cy="12" r="10" />
+                    </svg>
+                    <span>Created {formatDate(todo.createdAt)}</span>
+                  </div>
+                  {todo.updatedAt !== todo.createdAt && (
+                    <div className="flex items-center space-x-1">
                       <svg
-                        className="w-2.5 h-2.5 text-blue-600"
+                        className="w-3 h-3"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -185,32 +189,11 @@ const TodoItem: React.FC<TodoItemProps> = ({
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeWidth={2.5}
-                          d="M12 6v6l4 2"
+                          strokeWidth={2}
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                         />
-                        <circle cx="12" cy="12" r="10" />
                       </svg>
-                    </div>
-                    <span className="font-medium">Created {formatDate(todo.createdAt)}</span>
-                  </div>
-                  {todo.updatedAt !== todo.createdAt && (
-                    <div className="flex items-center space-x-1.5 text-gray-400 hover:text-gray-600 transition-colors">
-                      <div className="w-4 h-4 bg-green-100 rounded-full flex items-center justify-center">
-                        <svg
-                          className="w-2.5 h-2.5 text-green-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2.5}
-                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                          />
-                        </svg>
-                      </div>
-                      <span className="font-medium">Updated {formatDate(todo.updatedAt)}</span>
+                      <span>Updated {formatDate(todo.updatedAt)}</span>
                     </div>
                   )}
                 </div>
@@ -219,12 +202,12 @@ const TodoItem: React.FC<TodoItemProps> = ({
           </div>
         </div>
 
-        {/* Enhanced Action buttons with better styling */}
-        <div className="flex items-center space-x-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 flex-shrink-0">
+        {/* Action buttons */}
+        <div className="flex items-center space-x-sm opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200 flex-shrink-0">
           {onEdit && !isEditing && (
             <button
               onClick={handleEditClick}
-              className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 transform hover:scale-110 shadow-md hover:shadow-lg border border-transparent hover:border-blue-200"
+              className="p-2 text-textSecondary hover:text-primary hover:bg-primary/10 rounded-sm transition-all duration-200 border border-transparent hover:border-primary/20"
               aria-label={`Edit "${todo.title}"`}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -242,15 +225,15 @@ const TodoItem: React.FC<TodoItemProps> = ({
             <button
               onClick={() => onDelete(todo.id)}
               disabled={isDeleting}
-              className={`p-2.5 rounded-xl transition-all duration-200 transform shadow-md hover:shadow-lg border border-transparent ${
+              className={`p-2 rounded-sm transition-all duration-200 border border-transparent ${
                 isDeleting
-                  ? "text-gray-300 cursor-not-allowed bg-gray-50"
-                  : "text-gray-400 hover:text-red-600 hover:bg-red-50 hover:border-red-200 hover:scale-110"
+                  ? "text-textSecondary cursor-not-allowed bg-gray-50"
+                  : "text-textSecondary hover:text-error hover:bg-error/10 hover:border-error/20"
               }`}
               aria-label={isDeleting ? `Deleting "${todo.title}"...` : `Delete "${todo.title}"`}
             >
               {isDeleting ? (
-                <div className="w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-4 h-4 border-2 border-textSecondary border-t-transparent rounded-full animate-spin"></div>
               ) : (
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path

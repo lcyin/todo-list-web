@@ -1,12 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Enhanced scrollbar styling for better aesthetics */
+/* Base styles */
+@layer base {
+  body {
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.5;
+    color: #212121;
+  }
+
+  /* Enhanced focus styles for accessibility */
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #2196f3;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+  }
+
+  /* Custom selection styling */
+  ::selection {
+    background: rgba(33, 150, 243, 0.2);
+    color: #212121;
+  }
+
+  ::-moz-selection {
+    background: rgba(33, 150, 243, 0.2);
+    color: #212121;
+  }
+}
+
+/* Clean scrollbar styling */
 @layer utilities {
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: #94a3b8 #f1f5f9;
+    scrollbar-color: #757575 #e0e0e0;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
@@ -14,194 +47,41 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: #e0e0e0;
     border-radius: 8px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #94a3b8, #64748b);
+    background: #757575;
     border-radius: 8px;
-    border: 2px solid #f1f5f9;
+    border: 2px solid #e0e0e0;
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, #64748b, #475569);
+    background: #212121;
   }
 
-  /* Smooth entrance animations */
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-out forwards;
+  /* Simple, clean transitions as specified in visual guide */
+  .transition-standard {
+    transition: all 200ms ease-in-out;
   }
 
-  .animate-slide-up {
-    animation: slideUp 0.6s ease-out forwards;
+  /* Hover lift effect for cards */
+  .hover-lift:hover {
+    transform: translateY(-2px);
   }
 
-  .animate-bounce-in {
-    animation: bounceIn 0.7s ease-out forwards;
+  /* Button hover scale effect */
+  .hover-scale:hover {
+    transform: scale(1.02);
   }
 
-  .animate-pulse-gentle {
-    animation: pulseGentle 2s ease-in-out infinite;
+  /* Button press effect */
+  .btn-press {
+    transition: all 0.1s ease-in-out;
   }
 
-  /* Floating effect for cards */
-  .float-on-hover {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  .btn-press:active {
+    transform: scale(0.95);
   }
-
-  .float-on-hover:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  }
-
-  /* Glass morphism effect */
-  .glass {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-  }
-
-  .glass-strong {
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-  }
-
-  /* Modern gradient text */
-  .gradient-text {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .gradient-text-blue {
-    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-}
-
-/* Keyframe animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes bounceIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.3) translateY(30px);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.05) translateY(-10px);
-  }
-  70% {
-    transform: scale(0.98) translateY(5px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes pulseGentle {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.05);
-  }
-}
-
-/* Enhanced focus styles for better accessibility */
-@layer base {
-  * {
-    outline: none;
-  }
-
-  button:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible {
-    outline: 3px solid #3b82f6;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
-  }
-
-  /* Smooth transitions for all interactive elements */
-  button,
-  input,
-  select,
-  textarea {
-    transition: all 0.2s ease-in-out;
-  }
-
-  /* Custom selection styling */
-  ::selection {
-    background: rgba(59, 130, 246, 0.2);
-    color: #1e293b;
-  }
-
-  ::-moz-selection {
-    background: rgba(59, 130, 246, 0.2);
-    color: #1e293b;
-  }
-}
-
-/* Enhanced loading animation */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin-slow {
-  animation: spin 3s linear infinite;
-}
-
-/* Card hover effects */
-.card-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-/* Button press effect */
-.btn-press {
-  transition: all 0.1s ease-in-out;
-}
-
-.btn-press:active {
-  transform: scale(0.95);
 }
