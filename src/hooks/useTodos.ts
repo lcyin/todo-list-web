@@ -34,10 +34,11 @@ export const useTodos = (): UseTodosReturn => {
 
     try {
       const response = await todoApi.getTodos(filters);
-      setTodos(response.data.data);
-      setPagination(response.data.pagination);
+      setTodos(response.data.data || []);
+      setPagination(response.data.pagination || null);
     } catch (err: any) {
       setError(err.response?.data?.error?.message || "Failed to fetch todos");
+      setTodos([]); // Ensure todos is always an array even on error
     } finally {
       setIsLoading(false);
     }

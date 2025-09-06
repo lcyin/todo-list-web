@@ -61,18 +61,18 @@ export const TodoList: React.FC = () => {
           )}
         </div>
 
-        {isLoading && todos.length === 0 ? (
+        {isLoading && (!todos || todos.length === 0) ? (
           <div className="loading-container">
             <p>Loading todos...</p>
           </div>
-        ) : todos.length === 0 ? (
+        ) : !todos || todos.length === 0 ? (
           <div className="empty-state">
             <p>No todos found. Create your first todo above!</p>
           </div>
         ) : (
           <>
             <div className="todos-grid">
-              {todos.map((todo) => (
+              {(todos || []).map((todo) => (
                 <TodoItem
                   key={todo.id}
                   todo={todo}
